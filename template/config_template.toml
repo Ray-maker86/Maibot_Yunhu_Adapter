@@ -1,0 +1,9 @@
+[YunhuConfig]
+# 云湖方面相关配置
+api_url = "https://chat-go.jwzhd.com/open-apis/v1/bot/messages"
+api_key = ""
+
+[MaiBotConfig]
+# 麦麦连接配置
+server = "127.0.0.1"
+port = 8000

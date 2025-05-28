@@ -1,16 +1,16 @@
-import requests
+import asyncio
 import time
-import json
+import requests
+
+from .config import BaseConfig
 
 
 class ChatMessageFetcher:
-    def __init__(self):
-        # 云湖API配置
-        self.api_url = ""  # 替换为实际API地址
-        self.token = ""  # 替换为实际token
+    def __init__(self, config_path):
+        self.config = BaseConfig(config_path)
         # 请求头配置
         self.headers = {
-            "Authorization": f"Bearer {self.token}",
+            "Authorization": f"Bearer {self.config.yunhu_config.api_key}",
             "Content-Type": "application/json",
             "User-Agent": "BotChatFetcher/1.0",
         }
@@ -18,7 +18,7 @@ class ChatMessageFetcher:
         self.last_timestamp = int(time.time() * 1000)  # 初始化为当前时间戳（毫秒）
         self.running = True
 
-    def fetch_messages(self):
+    async def fetch_messages(self):
         """获取新消息"""
         try:
             params = {
@@ -46,7 +46,7 @@ class ChatMessageFetcher:
                 # 在这里添加你的消息处理逻辑
                 # 例如：调用机器人回复接口、进行数据分析等
 
-    def run(self, interval=5):
+    def run(self, interval=5):  # sourcery skip: use-named-expression
         """启动轮询"""
         print("消息监控已启动...")
         while self.running:
@@ -63,8 +63,3 @@ class ChatMessageFetcher:
             except Exception as e:
                 print(f"运行异常: {str(e)}")
                 time.sleep(interval * 2)  # 异常时延长等待
-
-
-if __name__ == "__main__":
-    fetcher = ChatMessageFetcher()
-    fetcher.run(interval=3)  # 每3秒检查一次新消息
